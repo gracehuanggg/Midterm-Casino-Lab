@@ -10,15 +10,15 @@ class UserManager:
 
     def __init__(self, db_path: Optional[str] = None):
         self.db_path = db_path or DB_PATH
-        self.ensure_db()
+        self._ensure_db()
 
-    def ensure_db(self) -> None:
+    def _ensure_db(self) -> None:
         if not os.path.exists(self.db_path):
-            self.save_db({"users": {}})
+            self._save_db({"users": {}})
         else:
-            data = self.load_db()
+            data = self._load_db()
             if not isinstance(data, dict) or "users" not in data:
-                self.save_db({"users": {}})
+                self._save_db({"users": {}})
                 return
             users = data.get("users", {})
             changed = False
@@ -28,23 +28,23 @@ class UserManager:
                     changed = True
             if changed:
                 data["users"] = users
-                self.save_db(data)
+                self._save_db(data)
 
-    def load_db(self) -> Dict:
+    def _load_db(self) -> Dict:
         try:
             with open(self.db_path, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception:
             return {"users": {}}
 
-    def save_db(self, data: Dict) -> None:
+    def _save_db(self, data: Dict) -> None:
         with open(self.db_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
-    def hash_password(self, password: str) -> Dict[str, str]:
+    def _hash_password(self, password: str) -> Dict[str, str]:
         return {"pw": password}
 
-    def verify_password(self, stored: Dict[str, str], password: str) -> bool:
+    def _verify_password(self, stored: Dict[str, str], password: str) -> bool:
         return secrets.compare_digest(stored.get("pw", ""), password)
 
     def register(self, username: str, password: str) -> bool:
@@ -53,24 +53,25 @@ class UserManager:
         if not username or not password:
             return False
 
-        db = self.load_db()
+        db = self._load_db()
         users = db.setdefault("users", {})
         if username in users:
             return False
 
-        users[username] = self.hash_password(password)
-        self.save_db(db)
+        users[username] = self._hash_password(password)
+        self._save_db(db)
         return True
 
     def authenticate(self, username: str, password: str) -> bool:
-        db = self.load_db()
+        db = self._load_db()
         users = db.get("users", {})
         stored = users.get(username)
         if not stored:
             return False
-        return self.verify_password(stored, password)
+        return self._verify_password(stored, password)
 
-def login(self, username: str, password: str) -> bool:
+    #added in login and logout function
+    def login(self, username: str, password: str) -> bool:
         "Logging in..."
         if self.authenticate(username, password):
             self.current_user = username
@@ -80,7 +81,7 @@ def login(self, username: str, password: str) -> bool:
             print("Invalid username or password.")
             return False
 
-def logout(self) -> bool:
+    def logout(self) -> bool:
         "Logging out..."
         if self.current_user:
             print(f"{self.current_user} has been logged out.")
@@ -90,9 +91,8 @@ def logout(self) -> bool:
             print("No user is logged in.")
             return False
 
-
 if __name__ == "__main__":
-    # Minimal demo
+    #make sure user.py runs
     um = UserManager()
     print("Demo: register user 'demo' with password 'potato'")
     ok = um.register("tomato", "potato")
