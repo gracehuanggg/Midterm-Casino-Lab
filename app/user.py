@@ -88,7 +88,7 @@ class UserManager:
             self.current_user = None
             return True
         else:
-            print("No user is currently logged in.")
+            print("No user is logged in.")
             return False
 
 if __name__ == "__main__":
