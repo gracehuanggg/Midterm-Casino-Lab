@@ -70,7 +70,7 @@ class UserManager:
             return False
         return self._verify_password(stored, password)
 
-
+    #added in login and logout function
     def login(self, username: str, password: str) -> bool:
         "Logging in..."
         if self.authenticate(username, password):
@@ -92,7 +92,7 @@ class UserManager:
             return False
 
 if __name__ == "__main__":
-    # Minimal demo
+    #make sure user.py runs
     um = UserManager()
     print("Demo: register user 'demo' with password 'potato'")
     ok = um.register("tomato", "potato")
