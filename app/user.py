@@ -70,6 +70,27 @@ class UserManager:
             return False
         return self.verify_password(stored, password)
 
+def login(self, username: str, password: str) -> bool:
+        "Logging in..."
+        if self.authenticate(username, password):
+            self.current_user = username
+            print(f"{username} is now logged in.")
+            return True
+        else:
+            print("Invalid username or password.")
+            return False
+
+def logout(self) -> bool:
+        "Logging out..."
+        if self.current_user:
+            print(f"{self.current_user} has been logged out.")
+            self.current_user = None
+            return True
+        else:
+            print("No user is logged in.")
+            return False
+
+
 if __name__ == "__main__":
     # Minimal demo
     um = UserManager()
