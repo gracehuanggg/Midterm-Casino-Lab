@@ -10,15 +10,15 @@ class UserManager:
 
     def __init__(self, db_path: Optional[str] = None):
         self.db_path = db_path or DB_PATH
-        self._ensure_db()
+        self.ensure_db()
 
-    def _ensure_db(self) -> None:
+    def ensure_db(self) -> None:
         if not os.path.exists(self.db_path):
-            self._save_db({"users": {}})
+            self.save_db({"users": {}})
         else:
-            data = self._load_db()
+            data = self.load_db()
             if not isinstance(data, dict) or "users" not in data:
-                self._save_db({"users": {}})
+                self.save_db({"users": {}})
                 return
             users = data.get("users", {})
             changed = False
@@ -28,23 +28,23 @@ class UserManager:
                     changed = True
             if changed:
                 data["users"] = users
-                self._save_db(data)
+                self.save_db(data)
 
-    def _load_db(self) -> Dict:
+    def load_db(self) -> Dict:
         try:
             with open(self.db_path, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception:
             return {"users": {}}
 
-    def _save_db(self, data: Dict) -> None:
+    def save_db(self, data: Dict) -> None:
         with open(self.db_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
-    def _hash_password(self, password: str) -> Dict[str, str]:
+    def hash_password(self, password: str) -> Dict[str, str]:
         return {"pw": password}
 
-    def _verify_password(self, stored: Dict[str, str], password: str) -> bool:
+    def verify_password(self, stored: Dict[str, str], password: str) -> bool:
         return secrets.compare_digest(stored.get("pw", ""), password)
 
     def register(self, username: str, password: str) -> bool:
@@ -53,22 +53,22 @@ class UserManager:
         if not username or not password:
             return False
 
-        db = self._load_db()
+        db = self.load_db()
         users = db.setdefault("users", {})
         if username in users:
             return False
 
-        users[username] = self._hash_password(password)
-        self._save_db(db)
+        users[username] = self.hash_password(password)
+        self.save_db(db)
         return True
 
     def authenticate(self, username: str, password: str) -> bool:
-        db = self._load_db()
+        db = self.load_db()
         users = db.get("users", {})
         stored = users.get(username)
         if not stored:
             return False
-        return self._verify_password(stored, password)
+        return self.verify_password(stored, password)
 
 if __name__ == "__main__":
     # Minimal demo
