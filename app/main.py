@@ -60,7 +60,19 @@ def start():
     session["dealer_cards"] = dealer_cards
     session["player_cards"] = player_cards
 
+    return f"""
+    <h2>How much do you wnat to bet?</h2>
+    <form action="{url_for('bet')}" method="post">
+        <input type="number" name="bet_amount" min="1" required>
+        <button type="submit">Place Bet</button>
+    """
+
+@app.route("/bet", methods=["POST"])
+def bet():
+    bet_amount = int(request.form["bet_amount"])
+    session["bet_amount"] = bet_amount
     return redirect(url_for("blackjack"))
+
 
 @app.route("/blackjack")
 def blackjack():
