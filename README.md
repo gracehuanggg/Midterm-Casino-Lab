@@ -76,6 +76,32 @@ The MVP must include:
 
 ## 5. Project Timeline
 
+## Timeline
+
+### **Mia**
+- **Monday–Tuesday:** Set up `database.json`; tested JSON structure and verified player balance/wins/losses updates; created Use Case diagram.
+- **Wednesday:** Built `main.py` routes for login and dashboard; debugged login connection to `user.py`.  
+- **Thursday:** Updated and finalized `README.md` with Grace; helped with debugging the main program.
+
+
+### **Ethan**
+- **Monday–Tuesday:** Created `user.py` registration and login validation; integrated password verification.  
+- **Wednesday:** Built HTML and CSS templates for the login and dashboard pages using Flask’s `render_template`; fixed login error handling and UI formatting issues; worked to debug the main program. 
+- **Thursday:** Testing login persistence and debugging; handled code-cleanup details; finalized the logout registration on the  home page; finalized the HTML. 
+
+
+### **Grace**
+- **Monday–Tuesday:** Wrote `funds.py` (deposit logic) and logout functionality in `user.py`; created the file structure on Github; created the Class Diagram; set up the Sprint Planning meeting.
+- **Wednesday:** Integrating JSON and `user.py` into `funds.py`; finished README.md document in new branch; created portion of `player.py` in calling function to funds; corrected Taiga User Story structure and board; finalized SRS document from work done together in class.
+- **Thursday:** Help with debugging main program; Finalize README.md final touches
+
+
+### **Joelle**
+- **Monday–Tuesday:** Implemented `blackjack.py` core game logic (deck creation, card values, dealer AI).  
+- **Wednesday:** Integrated blackjack backend into Flask routes (`main.py`); ran sample gameplay tests and debugged logic edge cases (demo recorded to Kevin); tested and debug the main page and program; created player class in `player.py`
+- **Thursday:** Continue debugging program for home page; assist in reviewing UML Diagrams.
+
+
 ### **Day-by-Day Plan**
 | Day | Goal | Deliverables |
 |------|------|--------------|
@@ -83,6 +109,7 @@ The MVP must include:
 | **Wednesday (by 8:00 PM)** | Frontend integration | `main.py` Flask routing and UI/UX templates ready |
 | **Wednesday Evening** | Testing & Debugging | Sample run and bug fixes based on feedback |
 | **Thursday (Class Time)** | Sprint Retrospective | Present and reflect on functionality and teamwork |
+ **Friday (Online)** | Sprint Retrospective | Reflection on current sprint & improvement for next sprint |
 
 ### **What We Accomplished**
 | Day | Goal | Deliverables |
@@ -92,11 +119,6 @@ The MVP must include:
 | **Wednesday Evening** | Testing & Debugging | Sample run and bug fixes based on feedback, UI/UX created |
 | **Thursday (Class Time)** | Cont. Testing & Debugging | Present and reflect on functionality and teamwork |
 | **Friday (Online)** | Sprint Retrospective | Present and reflect on functionality and teamwork via Zoom |
-
-### **Developer Notes**
-- Ethan and Joelle finish their assigned tasks before Wednesday’s sample run.  
-- Mia and Grace finalize files and verify functionality before class on Wednesday.  
-- Debug and document all changes on Wednesday evening.
 
 ---
 
