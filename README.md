@@ -74,7 +74,33 @@ The MVP must include:
 
 ---
 
-## 5. Feature Overview
+## 5. Project Timeline
+
+### **Day-by-Day Plan**
+| Day | Goal | Deliverables |
+|------|------|--------------|
+| **Tuesday (by 10:30 PM)** | Backend setup | `database.json`, `blackjack.py`, `funds.py`, `user.py` complete; review UML diagrams |
+| **Wednesday (by 8:00 PM)** | Frontend integration | `main.py` Flask routing and UI/UX templates ready |
+| **Wednesday Evening** | Testing & Debugging | Sample run and bug fixes based on feedback |
+| **Thursday (Class Time)** | Sprint Retrospective | Present and reflect on functionality and teamwork |
+
+### **What We Accomplished**
+| Day | Goal | Deliverables |
+|------|------|--------------|
+| **Tuesday (by 10:30 PM)** | Backend setup | `database.json`, `blackjack.py`, `funds.py`, `user.py` complete; UML diagrams |
+| **Wednesday (by 8:00 PM)** | Finish Backend setup | `blackjack.py`, `funds.py`, `user.py` updated |
+| **Wednesday Evening** | Testing & Debugging | Sample run and bug fixes based on feedback, UI/UX created |
+| **Thursday (Class Time)** | Cont. Testing & Debugging | Present and reflect on functionality and teamwork |
+| **Friday (Online)** | Sprint Retrospective | Present and reflect on functionality and teamwork via Zoom |
+
+### **Developer Notes**
+- Ethan and Joelle finish their assigned tasks before Wednesday’s sample run.  
+- Mia and Grace finalize files and verify functionality before class on Wednesday.  
+- Debug and document all changes on Wednesday evening.
+
+---
+
+## 6. Feature Overview
 
 ### User Registration & Login (`user.py`)
 - Register new users
@@ -102,7 +128,7 @@ The MVP must include:
 
 ---
 
-## 6. Diagrams and Documentation
+## 7. Diagrams and Documentation
 
 **docs/** includes:
 - **Use Case Diagram:** Player actions
@@ -111,7 +137,7 @@ The MVP must include:
 
 ---
 
-## 7. How to Run the App
+## 8. How to Run the App
 
 ### Prerequisites
 - Python 3.10 or later  
