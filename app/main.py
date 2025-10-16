@@ -5,14 +5,14 @@ from blackjack import pick_card, add, stand, winner, total
 
 app = Flask(__name__)
 user_manager = UserManager()
-app.secret_key = "supersecretkey"
+app.secret_key = "hiding_shit"
 
 
 @app.route("/")
 def index():
     username = session.get("username")
     if username:
-        return redirect(url_for("home"))
+        return redirect(url_for("login"))
     return redirect(url_for("login"))
 
 
@@ -59,7 +59,14 @@ def home():
     <form action="{url_for('start')}" method="post">
         <button type="submit">Play Blackjack</button>
     </form>
+    <form action="{url_for('logout')}" method="post">
+        <button type="submit">Logout</button>
+    </form>
     """
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    return redirect(url_for("login"))
 @app.route("/start", methods=["GET", "POST"])
 def start():
     username = session.get("username")
