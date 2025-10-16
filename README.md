@@ -38,18 +38,18 @@ The MVP must include:
 <pre>'''Midterm-Casino-Lab/
 │
 ├── app/ 
-│ ├── main.py 
-│ ├── blackjack.py 
-│ ├── player.py 
-│ ├── funds.py 
-│ └── user.py 
+│ ├── main.py # Flask entry point; connects all modules and handles routes
+│ ├── blackjack.py # Blackjack game backend logic and rules
+│ ├── player.py #Handles player class
+│ ├── funds.py # Handles deposit and balance management
+│ └── user.py # Manages user registration, login, and logout
 │
 ├── data/
 │ └── database.json # JSON file for user data and balances
 │├── docs/
-│ └── Use_Case_Diagram.png
-│ └── Class_Diagram.png
-│ └── SRS_Document.pdf 
+│ └── Use_Case_Diagram.png #Documents the use case of the program
+│ └── Class_Diagram.png #Documents the attributes and methods for each class
+│ └── SRS_Document.pdf #Purpose, Scope, General Constriants, User Stories, Acceptance Criteria
 │
 └── README.md # Documentation'''</pre>
 
