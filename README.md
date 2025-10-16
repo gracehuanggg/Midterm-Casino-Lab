@@ -93,7 +93,7 @@ The MVP must include:
 ### **Grace**
 - **Monday–Tuesday:** Wrote `funds.py` (deposit logic) and logout functionality in `user.py`; created the file structure on Github; created the Class Diagram; worked on the SRS. 
 - **Wednesday:** Integrating JSON and `user.py` into `funds.py`; finished README.md document in new branch; created portion of `player.py` in calling function to funds; corrected Taiga User Story structure and board; finalized SRS document from work done together in class.
-- **Thursday:** Help with debugging main program; Finalize README.md final touches; worked with Joelle to complete Class Diagram edits. 
+- **Thursday:** Help with debugging main program; Finalize `README.md` final touches; worked with Joelle to complete Class Diagram edits. 
 
 
 ### **Joelle**
