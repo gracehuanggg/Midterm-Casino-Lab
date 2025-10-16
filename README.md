@@ -104,7 +104,7 @@ Midterm-Casino-Lab/
 
 ## 6. Diagrams and Documentation
 
-**docs/UML_Diagram.png** includes:
+**docs/** includes:
 - **Use Case Diagram:** Player actions
 - **Class Diagram:** Displays methods and attributes for program’s classes
 - **SRS Document:** Outlines project scope, constraints, and user stories
