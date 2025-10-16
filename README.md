@@ -23,7 +23,7 @@ The MVP must include:
 ##  File Structure
 
 ---
-
+<pre>
 Midterm-Casino-Lab/
 │
 ├── main.py # Flask entry point; connects all modules and handles routes 
@@ -48,7 +48,7 @@ Midterm-Casino-Lab/
 │ └── UML_Diagram.png # Combined UML Case and Class Diagram 
 │
 ├── README.md # Project documentation 
-
+</pre>
 
 ---
 
