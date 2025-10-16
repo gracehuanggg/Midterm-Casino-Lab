@@ -25,7 +25,7 @@ The system:
 The goal of this sprint is to complete the **Minimum Viable Product (MVP)** for the **Python Casino** web app.  
 The MVP must include:
 
-- A working **user login and logout system***
+- A working **user login and logout system**
 - A **casino dashboard** that displays username and user balance
 - A **deposit funds** feature connected to the JSON database
 - A playable **Blackjack game**
