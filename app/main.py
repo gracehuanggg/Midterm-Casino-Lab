@@ -8,6 +8,14 @@ user_manager = UserManager()
 app.secret_key = "supersecretkey"
 
 
+@app.route("/")
+def index():
+    username = session.get("username")
+    if username:
+        return redirect(url_for("home"))
+    return redirect(url_for("login"))
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -52,15 +60,47 @@ def home():
         <button type="submit">Play Blackjack</button>
     </form>
     """
-@app.route("/start", methods=["POST"])
+@app.route("/start", methods=["GET", "POST"])
 def start():
-    dealer_cards = [pick_card(), pick_card()]
-    player_cards = [pick_card(), pick_card()]
+    username = session.get("username")
+    if not username:
+        return redirect(url_for("login"))
 
-    session["dealer_cards"] = dealer_cards
-    session["player_cards"] = player_cards
+    # load balance from DB
+    db = user_manager._load_db()
+    user_data = db.get("users", {}).get(username, {})
+    balance = user_data.get("balance", 0)
 
-    return redirect(url_for("blackjack"))
+    # If form submitted with a bet, validate and start the game
+    if request.method == "POST" and request.form.get("bet"):
+        try:
+            bet = int(request.form.get("bet"))
+        except (TypeError, ValueError):
+            return f"<h3>Invalid bet amount.</h3><a href='{url_for('start')}'>Back</a>"
+
+        if bet <= 0 or bet > balance:
+            return f"<h3>Bet must be between 1 and your balance (${balance}).</h3><a href='{url_for('start')}'>Back</a>"
+
+        # store bet in session and deal cards
+        session["bet"] = bet
+        dealer_cards = [pick_card(), pick_card()]
+        player_cards = [pick_card(), pick_card()]
+
+        session["dealer_cards"] = dealer_cards
+        session["player_cards"] = player_cards
+
+        return redirect(url_for("blackjack"))
+
+    # Otherwise show a simple bet form
+    return f"""
+        <h2>Place your bet</h2>
+        <p>Your balance: ${balance}</p>
+        <form method='POST'>
+            Bet amount: <input name='bet' type='number' min='1' max='{balance}' required><br><br>
+            <button type='submit'>Start Game</button>
+        </form>
+        <a href='{url_for('home')}'>Back to Home</a>
+    """
 
 @app.route("/blackjack")
 def blackjack():
@@ -96,6 +136,11 @@ def hit():
         dealer_cards = stand(dealer_cards)
         session["dealer_cards"] = dealer_cards
         result = winner(player_cards, dealer_cards)
+        bet = session.get("bet", 0)
+        username = session.get("username")
+        if username and bet:
+            apply_bet_result(username, result, bet)
+
         return f"""
         <h3>You busted!</h3>
         <p>Dealer cards: {', '.join(dealer_cards)}</p>
@@ -114,6 +159,12 @@ def stand_route():
     session["dealer_cards"] = dealer_cards
 
     result = winner(player_cards, dealer_cards)
+    # apply bet outcome to user's balance
+    bet = session.get("bet", 0)
+    username = session.get("username")
+    if username and bet:
+        apply_bet_result(username, result, bet)
+
     return f"""
     <h3>Game Over</h3>
     <p>Dealer cards: {', '.join(dealer_cards)}</p>
@@ -121,5 +172,40 @@ def stand_route():
     <p>Result: {result}</p>
     <a href="{url_for('home')}">Play Again</a>
     """
+
+
+def apply_bet_result(username, result, bet):
+    """Update the user's balance and win/loss counters in the JSON DB.
+    bet is expected as an int.
+    """
+    try:
+        bet = int(bet)
+    except (TypeError, ValueError):
+        return
+
+    db = user_manager._load_db()
+    users = db.setdefault("users", {})
+    user = users.get(username)
+    if not user:
+        return
+
+    balance = user.get("balance", 0)
+    money_won = user.get("money_won", 0)
+    money_lost = user.get("money_lost", 0)
+
+    if "You win" in result:
+        balance += bet
+        money_won = money_won + bet
+    elif "Dealer wins" in result:
+        balance -= bet
+        money_lost = money_lost + bet
+    else:
+#nothing happens if yall tie
+        pass
+    user["balance"] = balance
+    user["money_won"] = money_won
+    user["money_lost"] = money_lost
+
+    user_manager._save_db(db)
 if __name__ == "__main__":
     app.run(debug=True)
