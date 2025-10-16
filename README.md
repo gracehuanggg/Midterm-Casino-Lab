@@ -124,22 +124,22 @@ Midterm-Casino-Lab/
    ```bash
    git clone https://github.com/<your-username>/Midterm-Casino-Lab.git
    cd Midterm-Casino-Lab
-# 2. **Create a virtual environment (recommended)***
+2. **Create a virtual environment (recommended)***
 python -m venv venv
 
-# Activate the environment:
-# macOS/Linux use
-source venv/bin/activate
-# Windows (PowerShell) use
-venv\Scripts\activate
+Activate the environment:
+macOS/Linux use
+**source venv/bin/activate**
+Windows (PowerShell) use
+**venv\Scripts\activate**
 
-# 3. Install flask:
+3. **Install flask:**
 pip install flask
 
 
-# 5. Run the Flask app
+5. Run the Flask app
 python app/main.py
 
-# 6. Open the app in your browser
-# Visit:
-# put HTML
+6. Open the app in your browser
+Visit:
+put HTML
