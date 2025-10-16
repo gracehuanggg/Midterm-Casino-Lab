@@ -33,9 +33,9 @@ The MVP must include:
 
 ---
 
-## 3. File Structure
+<pre>## 3. File Structure
 
-Midterm-Casino-Lab/
+'''Midterm-Casino-Lab/
 │
 ├── app/ 
 │ ├── main.py 
@@ -51,7 +51,7 @@ Midterm-Casino-Lab/
 │ └── Class_Diagram.png
 │ └── SRS_Document.pdf 
 │
-└── README.md # Documentation
+└── README.md # Documentation'''</pre>
 
 ---
 
