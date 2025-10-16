@@ -55,7 +55,7 @@ The MVP must include:
 
 ---
 
-## 4. Task Assignment & Story Points (Total: 20 SP)
+## 4. Task Assignment & Story Points (Total: 17 SP)
 
 **Sprint Goal:** Build the MVP Flask app with login/logout, dashboard display, deposit funds, and a Blackjack game.
 
@@ -66,11 +66,11 @@ The MVP must include:
 | `player.py` | Player attributes and methods | Grace (Funds component), Joelle (Player class) | 2 |
 | `funds.py` | Handles user deposits and balance updates | Grace | 2 |
 | `user.py` | Login, registration, and logout processes | Ethan (Login & Registration), Grace (Logout) | 3 |
-| `main.py` | Connects routes and runs the Flask web app | Mia (Login route), Joelle (Home routes) | 5 |
+| `main.py` | Connects routes and runs the Flask web app | Mia (Login route), Joelle (Home routes) | 3 |
 | `templates` & `static` | Frontend layout and styling (HTML/CSS) | Ethan | 2 |
 | `README.md` | Project documentation and setup guide | Mia & Grace | 1 |
 
-**Total = 19 SP** Did not exceed 20 SPs
+**Total = 17 SP**
 
 ---
 
