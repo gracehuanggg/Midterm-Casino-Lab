@@ -76,24 +76,24 @@ The MVP must include:
 
 ## 5. Project Timeline
 
-## Timeline
+## Person-by-Person Work Distribution
 
 ### **Mia**
 - **Monday–Tuesday:** Set up `database.json`; tested JSON structure and verified player balance/wins/losses updates; created Use Case diagram.
 - **Wednesday:** Built `main.py` routes for login and dashboard; debugged login connection to `user.py`.  
-- **Thursday:** Updated and finalized `README.md` with Grace; helped with debugging the main program.
+- **Thursday:** Updated and finalized `README.md` with Grace; helped with debugging the main program; worked with Joelle to complete Use Case Diagram edits.
 
 
 ### **Ethan**
 - **Monday–Tuesday:** Created `user.py` registration and login validation; integrated password verification.  
-- **Wednesday:** Built HTML and CSS templates for the login and dashboard pages using Flask’s `render_template`; fixed login error handling and UI formatting issues; worked to debug the main program. 
+- **Wednesday:** Built HTML and CSS templates for the login and dashboard pages via Flask; fixed login error handling and UI formatting issues; worked to debug the main program. 
 - **Thursday:** Testing login persistence and debugging; handled code-cleanup details; finalized the logout registration on the  home page; finalized the HTML. 
 
 
 ### **Grace**
 - **Monday–Tuesday:** Wrote `funds.py` (deposit logic) and logout functionality in `user.py`; created the file structure on Github; created the Class Diagram; set up the Sprint Planning meeting.
 - **Wednesday:** Integrating JSON and `user.py` into `funds.py`; finished README.md document in new branch; created portion of `player.py` in calling function to funds; corrected Taiga User Story structure and board; finalized SRS document from work done together in class.
-- **Thursday:** Help with debugging main program; Finalize README.md final touches
+- **Thursday:** Help with debugging main program; Finalize README.md final touches; worked with Joelle to complete Class Diagram edits. 
 
 
 ### **Joelle**
