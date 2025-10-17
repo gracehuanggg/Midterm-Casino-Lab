@@ -154,9 +154,9 @@ The MVP must include:
 ## 7. Diagrams and Documentation
 
 **docs/** includes:
-- **Use Case Diagram:** Player actions (https://lucid.app/lucidchart/db6ef792-552b-4e21-be20-cae5d9f42742/edit?viewport_loc=-1882%2C-527%2C2397%2C949%2C0_0&invitationId=inv_6d23dd37-f146-46aa-9880-e10cf2342077)
-- **Class Diagram:** Displays methods and attributes for program’s classes: (https://lucid.app/lucidchart/22aa9750-5c3b-4ede-afa5-bd46d3b61a19/edit?viewport_loc=343%2C1577%2C2045%2C810%2C0_0&invitationId=inv_9c972763-ace1-4d19-ade3-b274f193d0de)
-- **SRS Document:** Outlines project scope, constraints, and user stories (https://docs.google.com/document/d/1b9aeBCB86Sk9OTaSR4VZdVhTB181bzRdht6O1Pu-BAM/edit?tab=t.0)
+- **Use Case Diagram:** Player actions 
+- **Class Diagram:** Displays methods and attributes for program’s classes
+- **SRS Document:** Outlines project scope, constraints, and user stories
 
 ---
 
