@@ -8,9 +8,9 @@
     },
     "ethan": {
       "pw": "abcd",
-      "balance": 600,
-      "money_won": 100,
-      "money_lost": 50
+      "balance": 1275,
+      "money_won": 1017,
+      "money_lost": 292
     },
     "grace": {
       "pw": "pass",
@@ -20,10 +20,15 @@
     },
     "joelle": {
       "pw": "7890",
-      "balance": 400,
-      "money_won": 50,
-      "money_lost": 150
+      "balance": 330,
+      "money_won": 110,
+      "money_lost": 280
     }
+  },
+  "ethan": {
+    "pw": "abcd",
+    "balance": 1400,
+    "money_won": 1017,
+    "money_lost": 167
   }
 }
-
