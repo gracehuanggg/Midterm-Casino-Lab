@@ -26,17 +26,17 @@ class Player:
         return self.balance
 
     def update_db(self) -> None:
-        with open(DB_PATH, "r") as f:
+        with open(DB_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
-        # Update this player's info
-        data[self.username] = {
+        users = data.setdefault("users", {})
+        users[self.username] = {
             "pw": self.password,
             "balance": self.balance,
             "money_won": self.money_won,
-            "money_lost": self.money_lost
+            "money_lost": self.money_lost,
         }
 
-        # Save back to JSON
-        with open(DB_PATH, "w") as f:
+
+        with open(DB_PATH, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)

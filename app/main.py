@@ -5,14 +5,14 @@ from blackjack import pick_card, add, stand, winner, total
 
 app = Flask(__name__)
 user_manager = UserManager()
-app.secret_key = "supersecretkey"
+app.secret_key = "hiding_shit"
 
 
 @app.route("/")
 def index():
     username = session.get("username")
     if username:
-        return redirect(url_for("home"))
+        return redirect(url_for("login"))
     return redirect(url_for("login"))
 
 
@@ -28,13 +28,15 @@ def login():
         else:
             return "<h3>Invalid username or password.</h3>"
 
-    return """
+    return f"""
         <form method='POST'>
             <h2>Login</h2>
             Username: <input name='username'><br>
             Password: <input type='password' name='password'><br><br>
             <button type='submit'>Login</button>
+            <p>Why dont you have an account you buffon <a href='{url_for('register')}'>Register</a></p>
         </form>
+        
     """
 
 
@@ -59,7 +61,18 @@ def home():
     <form action="{url_for('start')}" method="post">
         <button type="submit">Play Blackjack</button>
     </form>
+    <form action="{url_for('add_funds')}" method="post">
+        Add funds: <input name='amount' type='number' min='1' step='1' required>
+        <button type='submit'>Add</button>
+    </form>
+    <form action="{url_for('logout')}" method="post">
+        <button type="submit">Logout</button>
+    </form>
     """
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    return redirect(url_for("login"))
 @app.route("/start", methods=["GET", "POST"])
 def start():
     username = session.get("username")
@@ -207,5 +220,65 @@ def apply_bet_result(username, result, bet):
     user["money_lost"] = money_lost
 
     user_manager._save_db(db)
+
+
+@app.route("/add_funds", methods=["POST"])
+def add_funds():
+    username = session.get("username")
+    amount_number = request.form.get("amount")
+    try:
+        amount = float(amount_number)
+    except (TypeError, ValueError):
+        return f"<h3>Invalid amount, dofus.</h3><a href='{url_for('home')}'>Back</a>"
+
+    if amount <= 0:
+        return f"<h3>Amount must be positive, ding dong.</h3><a href='{url_for('home')}'>Back</a>"
+
+    db = user_manager._load_db()
+    users = db.setdefault("users", {})
+    user_data = users.get(username)
+    pw = user_data.get("pw")
+    balance = user_data.get("balance", 0)
+    money_won = user_data.get("money_won", 0)
+    money_lost = user_data.get("money_lost", 0)
+
+    player = Player(username, pw, balance, money_won, money_lost)
+
+    player.update_balance(amount)
+    player.update_db()
+
+    return f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('home')}'>You dont need to be here anymore do silly goose</a>"
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '')
+
+        db = user_manager._load_db()
+        users = db.setdefault('users', {})
+        users.setdefault(username, {})
+        users[username].setdefault('balance', 67)
+        users[username].setdefault('money_won', 0)
+        users[username].setdefault('money_lost', 0)
+        user_manager._save_db(db)
+
+        session['username'] = username
+        return redirect(url_for('home'))
+
+    # GET -> show simple registration form
+    return f"""
+        <form method='POST'>
+            <h2>Register</h2>
+            Username: <input name='username'><br>
+            Password: <input type='password' name='password'><br><br>
+            <button type='submit'>Register</button>
+        </form>
+        <a href='{url_for('login')}'>Back to Login</a>
+    """
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -10,25 +10,6 @@ class UserManager:
 
     def __init__(self, db_path: Optional[str] = None):
         self.db_path = db_path or DB_PATH
-        self._ensure_db()
-
-    def _ensure_db(self) -> None:
-        if not os.path.exists(self.db_path):
-            self._save_db({"users": {}})
-        else:
-            data = self._load_db()
-            if not isinstance(data, dict) or "users" not in data:
-                self._save_db({"users": {}})
-                return
-            users = data.get("users", {})
-            changed = False
-            for uname, record in list(users.items()):
-                if not isinstance(record, dict) or "pw" not in record:
-                    users.pop(uname)
-                    changed = True
-            if changed:
-                data["users"] = users
-                self._save_db(data)
 
     def _load_db(self) -> Dict:
         try:
@@ -71,30 +52,30 @@ class UserManager:
         return self._verify_password(stored, password)
 
     #added in login and logout function
-    def login(self, username: str, password: str) -> bool:
-        "Logging in..."
-        if self.authenticate(username, password):
-            self.current_user = username
-            print(f"{username} is now logged in.")
-            return True
-        else:
-            print("Invalid username or password.")
-            return False
+    # def login(self, username: str, password: str) -> bool:
+    #     "Logging in..."
+    #     if self.authenticate(username, password):
+    #         self.current_user = username
+    #         print(f"{username} is now logged in.")
+    #         return True
+    #     else:
+    #         print("Invalid username or password.")
+    #         return False
 
-    def logout(self) -> bool:
-        "Logging out..."
-        if self.current_user:
-            print(f"{self.current_user} has been logged out.")
-            self.current_user = None
-            return True
-        else:
-            print("No user is logged in.")
-            return False
+    # def logout(self) -> bool:
+    #     "Logging out..."
+    #     if self.current_user:
+    #         print(f"{self.current_user} has been logged out.")
+    #         self.current_user = None
+    #         return True
+    #     else:
+    #         print("No user is logged in.")
+    #         return False
 
-if __name__ == "__main__":
-    #make sure user.py runs
-    um = UserManager()
-    print("Demo: register user 'demo' with password 'potato'")
-    ok = um.register("tomato", "potato")
-    print("Registered?", ok)
-    print("Authenticate with correct password:", um.authenticate("tomato", "potato"))
+# if __name__ == "__main__":
+#     #make sure user.py runs
+#     um = UserManager()
+#     print("Demo: register user 'demo' with password 'potato'")
+#     ok = um.register("tomato", "potato")
+#     print("Registered?", ok)
+#     print("Authenticate with correct password:", um.authenticate("tomato", "potato"))
