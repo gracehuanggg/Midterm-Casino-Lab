@@ -11,8 +11,8 @@ app.secret_key = "hiding_shit"
 @app.route("/")
 def index():
     username = session.get("username")
-    if username:
-        return redirect(url_for("login"))
+    if username in session:
+        return redirect(url_for("home"))
     return redirect(url_for("login"))
 
 
@@ -26,7 +26,7 @@ def login():
             session["username"] = username
             return redirect(url_for("home"))
         else:
-            return "<h3>Invalid username or password.</h3>"
+            return "<h3>Invalid login credentials!!</h3>"
 
     return f"""
         <form method='POST'>
@@ -256,13 +256,9 @@ def register():
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
 
-        db = user_manager._load_db()
-        users = db.setdefault('users', {})
-        users.setdefault(username, {})
-        users[username].setdefault('balance', 67)
-        users[username].setdefault('money_won', 0)
-        users[username].setdefault('money_lost', 0)
-        user_manager._save_db(db)
+        success = user_manager.register(username, password)
+        if not success:
+            return "<h3>Username already exists.</h3><a href='/register'>Try again</a>"
 
         session['username'] = username
         return redirect(url_for('home'))

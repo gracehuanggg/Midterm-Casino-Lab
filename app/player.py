@@ -1,8 +1,7 @@
 from typing import Dict
 import os
 import json
-DB_PATH = os.path.join(os.path.dirname(__file__), "database.json")
-
+DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "database.json")
 class Player:
     def __init__(self, username: str, pw: str, balance: float, money_won: float, money_lost: float):
         self.username = username
@@ -26,7 +25,7 @@ class Player:
         return self.balance
 
     def update_db(self) -> None:
-        with open(DB_PATH, "r", encoding="utf-8") as f:
+        with open(DB_PATH, "r") as f:
                 data = json.load(f)
 
         users = data.setdefault("users", {})
@@ -38,5 +37,5 @@ class Player:
         }
 
 
-        with open(DB_PATH, "w", encoding="utf-8") as f:
+        with open(DB_PATH, "w") as f:
             json.dump(data, f, indent=4)
