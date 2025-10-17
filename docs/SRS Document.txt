@@ -1,0 +1,73 @@
+URL: https://docs.google.com/document/d/1b9aeBCB86Sk9OTaSR4VZdVhTB181bzRdht6O1Pu-BAM/edit?tab=t.0
+SRS DOCUMENT
+
+Part 1 - Important Features:
+
+Feature 1: User Registration, Login, & Logout System
+
+User story 1: As a forgetful gambler, I want a secure login method to store my information so that I will not lose track of my gambling history. 
+
+Acceptance criteria
+When initially launching the program, it will prompt for and record an individual username and password.
+On log out, the system will update the current winnings/losses.
+When logging in, if there is no username - password match, an error message will appear, and the system will not log in.
+
+Feature 2: Casino Lobby & Dashboard Display
+
+User story 2: As a professional and competitive gambler, I want to see a dashboard of my current balance so that I can track my current progress.  
+
+Acceptance criteria
+The dashboard displays the gambler’s username and current balance. 
+User can go back to the blackjack game and the deposit money. 
+
+Feature 3: Fund Deposits Tracker/Bank
+
+User story 2: As a frequent gambler, I want to be able to track my wins (and losses) digitally and automatically so that I can eventually use this money for personal purchases.
+
+Acceptance criteria
+Users can fill out a form to add more money to their deposit
+When the user wins a blackjack game, their won bet is added to the deposit
+When the user loses a blackjack game, my loss is reflected in their deposit
+When prompted, the user’s current bank value will be displayed
+
+
+Feature 4:  Blackjack game
+
+User story 4: As an addictive gambler, I want to be able to run the game smoothly so that I can have the best gambling experience.
+ 
+Acceptance criteria
+Includes a playable blackjack game versus an automated dealer 
+The player must be prompted an input for a bet before starting the game
+The player’s progress (wins & losses) must be updated and persisted in the JSON file
+
+
+
+Part 2 - Content to Provide
+
+Introduction
+1.1 Purpose
+The purpose of this project is to create a Python Casino Web Application that allows users to register, log in, and play the Blackjack game through an interactive Flask-based interface. The system will manage user accounts, track balance, and store data in a JSON file. 
+
+1.2 Scope
+This software provides a complete, browser-based Casino game for users. Players can register and log in with their username and password, access a dashboard that displays their balance, deposit funds, run a functional blackjack game, and have all progress stored in a JSON file. 
+
+Overall Description
+2.1 User Characteristics: Professional and casual gamblers who want a simple and reliable way to check their game performance and balance through a virtual platform.
+2.2 Constraints: 
+The program must be run using Python (Flask)
+All persistent data is stored in a single JSON file
+App should must run locally through Flask development server. 
+Each module (user.py, funds.py, blackjack.py, main.py) must remain independent. 
+
+
+Specific Requirements
+Functional Requirements:
+The system must allow a new user to create an account with a unique username and password. 
+After login, the system must show a dashboard that displays the username, current balance, and functions to defer to actions.
+The system must provide a form to add funds, auto-update on wins/losses, and display the current balance on screen. 
+The user should be able to start the game and input the bet entry. 
+Acceptance Criteria: (See all listed acceptance criteria above).
+
+
+
+
