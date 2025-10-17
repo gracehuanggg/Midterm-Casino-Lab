@@ -186,9 +186,6 @@ Windows (PowerShell) use
 pip install flask
 
 
-5. Run the Flask app
+4. Run the Flask app
 python app/main.py
 
-6. Open the app in your browser
-Visit:
-put HTML
