@@ -8,7 +8,7 @@
     },
     "ethan": {
       "pw": "abcd",
-      "balance": 600,
+      "balance": 800.0,
       "money_won": 100,
       "money_lost": 50
     },
