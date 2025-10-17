@@ -187,5 +187,5 @@ pip install flask
 
 
 4. Run the Flask app
-python app/main.py
+**python app/main.py**
 
