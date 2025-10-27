@@ -1,0 +1,34 @@
+{
+    "users": {
+        "mia": {
+            "pw": "1234",
+            "balance": 500,
+            "money_won": 0,
+            "money_lost": 0
+        },
+        "ethan": {
+            "pw": "abcd",
+            "balance": 1275,
+            "money_won": 1017,
+            "money_lost": 292
+        },
+        "grace": {
+            "pw": "pass",
+            "balance": 800,
+            "money_won": 300,
+            "money_lost": 0
+        },
+        "joelle": {
+            "pw": "7890",
+            "balance": 625.0,
+            "money_won": 50,
+            "money_lost": 180
+        },
+        "hihi": {
+            "pw": "1414",
+            "balance": 100,
+            "money_won": 0,
+            "money_lost": 0
+        }
+    }
+}
