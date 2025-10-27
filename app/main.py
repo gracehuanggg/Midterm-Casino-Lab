@@ -247,7 +247,7 @@ def add_funds():
     player.update_balance(amount)
     player.update_db()
 
-    return f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('home')}'>You dont need to be here anymore do silly goose</a>"
+    return f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('home')}'>You dont need to be here anymore, you silly goose</a>"
 
 
 @app.route('/register', methods=['GET', 'POST'])
