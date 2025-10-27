@@ -34,7 +34,7 @@ def login():
             Username: <input name='username'><br>
             Password: <input type='password' name='password'><br><br>
             <button type='submit'>Login</button>
-            <p>Why dont you have an account you buffon <a href='{url_for('register')}'>Register</a></p>
+            <p>Why don't you have an account, you buffoon! <a href='{url_for('register')}'>Register</a></p>
         </form>
         
     """
