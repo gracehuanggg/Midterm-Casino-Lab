@@ -11,7 +11,7 @@ app.secret_key = "hiding_shit"
 @app.route("/")
 def index():
     username = session.get("username")
-    if username in session:
+    if username:
         return redirect(url_for("home"))
     return redirect(url_for("login"))
 
@@ -75,7 +75,7 @@ def home():
 
 @app.route("/logout", methods=["POST"])
 def logout():
-    session.clear
+    session.clear()
     return redirect(url_for("login"))
 @app.route("/start", methods=["GET", "POST"])
 def start():
@@ -89,7 +89,7 @@ def start():
     balance = user_data.get("balance", 0)
     if not user_data:
         session.clear()
-        return redirect(url_fpr("login"))
+        return redirect(url_for("login"))
 
     # If form submitted with a bet, validate and start the game
     if request.method == "POST" and request.form.get("bet"):
