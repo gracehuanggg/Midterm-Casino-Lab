@@ -95,7 +95,7 @@ def start():
             return f"<h3>Invalid bet amount.</h3><a href='{url_for('start')}'>Back</a>"
 
         if bet <= 0 or bet > balance:
-            return f"<h3>Bet must be between 1 and your balance (${balance.2f}).</h3><a href='{url_for('start')}'>Back</a>"
+            return f"<h3>Bet must be between 1 and your balance (${balance:.2f}).</h3><a href='{url_for('start')}'>Back</a>"
 
         # store bet in session and deal cards
         session["bet"] = bet
@@ -110,7 +110,7 @@ def start():
     # Otherwise show a simple bet form
     return f"""
         <h2>Place your bet</h2>
-        <p>Your balance: ${balance.2f}</p>
+        <p>Your balance: ${balance:.2f}</p>
         <form method='POST'>
             Bet amount: <input name='bet' type='number' min='1' max='{balance}' required><br><br>
             <button type='submit'>Start Game</button>
