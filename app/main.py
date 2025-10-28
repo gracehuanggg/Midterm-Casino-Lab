@@ -61,11 +61,11 @@ def home():
     <h3>Place your bet</h3>
     <form action="{url_for('start')}" method="post">
         Bet amount:
-        <input name='bet' type='number' min='1' max='{int(balance)}' step='1' required><br><br>
+        <input name='bet' type='number' min='1' max='{balance.2f}' step='0.01' required><br><br>
         <button type='submit'>Play Blackjack</button>
     </form>
     <form action="{url_for('add_funds')}" method="post">
-        Add funds: <input name='amount' type='number' min='1' step='1' required>
+        Add funds: <input name='amount' type='number' min='0.01' step='0.01' required>
         <button type='submit'>Add</button>
     </form>
     <form action="{url_for('logout')}" method="post">
@@ -86,23 +86,29 @@ def start():
     # load balance from DB
     db = user_manager._load_db()
     user_data = db.get("users", {}).get(username, {})
-    balance = user_data.get("balance", 0)
     if not user_data:
         session.clear()
         return redirect(url_for("login"))
+    balance = user_data.get("balance", 0)
 
+    pw = user_data.get("pw")
+    balance = user_data.get("balance", 0)
+    money_won = user_data.get("money_won", 0)
+    money_lost = user_data.get("money_lost", 0)
+    
     # If form submitted with a bet, validate and start the game
     if request.method == "POST" and request.form.get("bet"):
         try:
-            bet = int(request.form.get("bet"))
+            bet = float(request.form.get("bet"))
         except (TypeError, ValueError):
             return f"<h3>Invalid bet amount.</h3><a href='{url_for('start')}'>Back</a>"
 
         if bet <= 0 or bet > balance:
-            return f"<h3>Bet must be between 1 and your balance (${balance:.2f}).</h3><a href='{url_for('start')}'>Back</a>"
+            return f"<h3>Bet must be between 0.01 and your balance (${balance:.2f}).</h3><a href='{url_for('start')}'>Back</a>"
+        session["bet"]= round(bet, 2)
 
         # store bet in session and deal cards
-        session["bet"] = bet
+        session["bet"] = round (bet,2)
         dealer_cards = [pick_card(), pick_card()]
         player_cards = [pick_card(), pick_card()]
 
@@ -116,7 +122,7 @@ def start():
         <h2>Place your bet</h2>
         <p>Your balance: ${balance:.2f}</p>
         <form method='POST'>
-            Bet amount: <input name='bet' type='number' min='1' max='{int(balance)}' step='0.01' required><br><br>
+            Bet amount: <input name='bet' type='number' min='0.01' max='{balance.2f}' step='0.01' required><br><br>
             <button type='submit'>Start Game</button>
         </form>
         <a href='{url_for('home')}'>Back to Home</a>
@@ -209,9 +215,9 @@ def apply_bet_result(username, result, bet):
     if not user:
         return
 
-    balance = user.get("balance", 0)
-    money_won = user.get("money_won", 0)
-    money_lost = user.get("money_lost", 0)
+    balance = float(user.get("balance", 0))
+    money_won = float(user.get("money_won", 0))
+    money_lost = float(user.get("money_lost", 0))
 
     if "You win" in result:
         balance += bet
@@ -222,9 +228,9 @@ def apply_bet_result(username, result, bet):
     else:
 #nothing happens if yall tie
         pass
-    user["balance"] = balance
-    user["money_won"] = money_won
-    user["money_lost"] = money_lost
+    user["balance"] = round(balance, 2)
+    user["money_won"] = round(money_won, 2)
+    user["money_lost"] = round (money_lost, 2)
 
     user_manager._save_db(db)
 
@@ -244,6 +250,9 @@ def add_funds():
     db = user_manager._load_db()
     users = db.setdefault("users", {})
     user_data = users.get(username)
+    if not user_data:
+        session_clear()
+        return redirect(url_for("login"))
     pw = user_data.get("pw")
     balance = user_data.get("balance", 0)
     money_won = user_data.get("money_won", 0)
@@ -254,7 +263,7 @@ def add_funds():
     player.update_balance(amount)
     player.update_db()
 
-    return f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('home')}'>You dont need to be here anymore, you silly goose</a>"
+    return f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('home')}'>You don't need to be here anymore, you silly goose</a>"
 
 
 @app.route('/register', methods=['GET', 'POST'])
