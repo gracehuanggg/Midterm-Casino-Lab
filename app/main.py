@@ -87,6 +87,9 @@ def start():
     db = user_manager._load_db()
     user_data = db.get("users", {}).get(username, {})
     balance = user_data.get("balance", 0)
+    if not user_data:
+        session.clear()
+        return redirect(url_fpr("login"))
 
     # If form submitted with a bet, validate and start the game
     if request.method == "POST" and request.form.get("bet"):
@@ -113,7 +116,7 @@ def start():
         <h2>Place your bet</h2>
         <p>Your balance: ${balance:.2f}</p>
         <form method='POST'>
-            Bet amount: <input name='bet' type='number' min='1' max='{balance}' required><br><br>
+            Bet amount: <input name='bet' type='number' min='1' max='{int(balance)}' step='0.01' required><br><br>
             <button type='submit'>Start Game</button>
         </form>
         <a href='{url_for('home')}'>Back to Home</a>
