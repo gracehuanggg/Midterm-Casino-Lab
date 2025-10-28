@@ -48,6 +48,9 @@ def home():
 
     db = user_manager._load_db()
     user_data = db.get("users").get(username)
+    if not user_data:
+        session.clear()
+        return redirect(url_for("login"))
     pw = user_data.get("pw")
     balance = user_data.get("balance", 0)
     money_won = user_data.get("money_won", 0)
@@ -61,7 +64,7 @@ def home():
     <h3>Place your bet</h3>
     <form action="{url_for('start')}" method="post">
         Bet amount:
-        <input name='bet' type='number' min='1' max='{balance.2f}' step='0.01' required><br><br>
+        <input name='bet' type='number' min='1' max='{balance:.2f}' step='0.01' required><br><br>
         <button type='submit'>Play Blackjack</button>
     </form>
     <form action="{url_for('add_funds')}" method="post">
@@ -108,7 +111,6 @@ def start():
         session["bet"]= round(bet, 2)
 
         # store bet in session and deal cards
-        session["bet"] = round (bet,2)
         dealer_cards = [pick_card(), pick_card()]
         player_cards = [pick_card(), pick_card()]
 
@@ -122,7 +124,7 @@ def start():
         <h2>Place your bet</h2>
         <p>Your balance: ${balance:.2f}</p>
         <form method='POST'>
-            Bet amount: <input name='bet' type='number' min='0.01' max='{balance.2f}' step='0.01' required><br><br>
+            Bet amount: <input name='bet' type='number' min='0.01' max='{balance:.2f}' step='0.01' required><br><br>
             <button type='submit'>Start Game</button>
         </form>
         <a href='{url_for('home')}'>Back to Home</a>
@@ -202,10 +204,10 @@ def stand_route():
 
 def apply_bet_result(username, result, bet):
     """Update the user's balance and win/loss counters in the JSON DB.
-    bet is expected as an int.
+    bet is expected as a float.
     """
     try:
-        bet = int(bet)
+        bet = float(bet)
     except (TypeError, ValueError):
         return
 
@@ -251,7 +253,7 @@ def add_funds():
     users = db.setdefault("users", {})
     user_data = users.get(username)
     if not user_data:
-        session_clear()
+        session.clear()
         return redirect(url_for("login"))
     pw = user_data.get("pw")
     balance = user_data.get("balance", 0)
