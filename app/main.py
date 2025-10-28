@@ -75,6 +75,7 @@ def home():
 
 @app.route("/logout", methods=["POST"])
 def logout():
+    session.clear
     return redirect(url_for("login"))
 @app.route("/start", methods=["GET", "POST"])
 def start():
