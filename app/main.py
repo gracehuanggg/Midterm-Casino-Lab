@@ -95,7 +95,7 @@ def start():
             return f"<h3>Invalid bet amount.</h3><a href='{url_for('start')}'>Back</a>"
 
         if bet <= 0 or bet > balance:
-            return f"<h3>Bet must be between 1 and your balance (${balance}).</h3><a href='{url_for('start')}'>Back</a>"
+            return f"<h3>Bet must be between 1 and your balance (${balance.2f}).</h3><a href='{url_for('start')}'>Back</a>"
 
         # store bet in session and deal cards
         session["bet"] = bet
