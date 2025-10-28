@@ -57,9 +57,12 @@ def home():
 
     return f"""
     <h2>Welcome {username}!</h2>
-    <p>Balance: ${balance}</p>
+    <p>Balance: ${balance:.2f}</p>
+    <h3>Place your bet</h3>
     <form action="{url_for('start')}" method="post">
-        <button type="submit">Play Blackjack</button>
+        Bet amount:
+        <input name='bet' type='number' min='1' max='{int(balance)}' step='1' requires <br><br>
+        <button type='submit'>Play Blackjack</button>
     </form>
     <form action="{url_for('add_funds')}" method="post">
         Add funds: <input name='amount' type='number' min='1' step='1' required>
