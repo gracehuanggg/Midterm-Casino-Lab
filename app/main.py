@@ -61,7 +61,7 @@ def home():
     <h3>Place your bet</h3>
     <form action="{url_for('start')}" method="post">
         Bet amount:
-        <input name='bet' type='number' min='1' max='{int(balance)}' step='1' requires <br><br>
+        <input name='bet' type='number' min='1' max='{int(balance)}' step='1' required><br><br>
         <button type='submit'>Play Blackjack</button>
     </form>
     <form action="{url_for('add_funds')}" method="post">
@@ -110,7 +110,7 @@ def start():
     # Otherwise show a simple bet form
     return f"""
         <h2>Place your bet</h2>
-        <p>Your balance: ${balance}</p>
+        <p>Your balance: ${balance.2f}</p>
         <form method='POST'>
             Bet amount: <input name='bet' type='number' min='1' max='{balance}' required><br><br>
             <button type='submit'>Start Game</button>
