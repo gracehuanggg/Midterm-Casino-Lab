@@ -236,6 +236,12 @@ def add_funds():
 
     if amount <= 0:
         return f"<h3>Amount must be positive, ding dong.</h3><a href='{url_for('home')}'>Back</a>"
+        
+        # Prevent unrealistic deposits over $1 billion
+        
+    if amount > 1_000_000_000:
+        return f"<h3>Deposit exceeds the $1,000,000,000 limit.</h3><a href='{url_for('home')}'>Back</a>"
+
 
     db = user_manager._load_db()
     users = db.setdefault("users", {})
