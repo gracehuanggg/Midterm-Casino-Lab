@@ -2,6 +2,7 @@ from flask import Flask, request, session, redirect, url_for
 from user import UserManager
 from player import Player
 from blackjack import pick_card, add, stand, winner, total
+from slot import pull_lever
 
 app = Flask(__name__)
 user_manager = UserManager()
@@ -11,7 +12,7 @@ app.secret_key = "hiding_shit"
 @app.route("/")
 def index():
     username = session.get("username")
-    if username in session:
+    if username:
         return redirect(url_for("home"))
     return redirect(url_for("login"))
 
@@ -48,12 +49,7 @@ def home():
 
     db = user_manager._load_db()
     user_data = db.get("users").get(username)
-    pw = user_data.get("pw")
     balance = user_data.get("balance", 0)
-    money_won = user_data.get("money_won", 0)
-    money_lost = user_data.get("money_lost", 0)
-
-    player = Player(username, pw, balance, money_won, money_lost)
 
     return f"""
     <h2>Welcome {username}!</h2>
@@ -65,6 +61,10 @@ def home():
         Add funds: <input name='amount' type='number' min='1' step='1' required>
         <button type='submit'>Add</button>
     </form>
+    <form action="{url_for('slot')}" method="post">
+        <button type="submit">Pull Slot Machine Lever</button>
+    </form>
+    <p>Play the slot machine game! 10$ to spin once! </p>
     <form action="{url_for('logout')}" method="post">
         <button type="submit">Logout</button>
     </form>
@@ -72,7 +72,44 @@ def home():
 
 @app.route("/logout", methods=["POST"])
 def logout():
+    session.clear()
     return redirect(url_for("login"))
+
+@app.route("/slot", methods=["GET", "POST"])
+def slot():
+    username = session.get("username")
+    if not username:    
+        return redirect(url_for("login"))
+    
+    db = user_manager._load_db()
+    users = db.setdefault("users", {})
+    user_data = users.get(username)
+    pw = user_data.get("pw")
+    balance = user_data.get("balance", 0)
+    money_won = user_data.get("money_won", 0)
+    money_lost = user_data.get("money_lost", 0)
+
+    player = Player(username, pw, balance, money_won, money_lost)
+    cards = pull_lever()
+    player.update_balance(-10)
+    message = ""
+    if (cards[0] == cards[1] == cards[2]):
+        player.update_balance(cards[0] * 3)
+        message = f"Congrats! You won {cards[0] * 3}!"
+    else:
+        message = "You didn't win anything :("
+
+    player.update_db()
+    return f"""
+    <h2>Slot Machine: </h2>   
+    <p>Your pulls: {', '.join(map(str, cards))}</p>
+    <p>{message}</p>
+    <p>Your new balance is: ${player.balance}</p>
+    <a href="{url_for('home')}">Back to Home</a>
+    """
+    
+
+
 @app.route("/start", methods=["GET", "POST"])
 def start():
     username = session.get("username")
@@ -273,8 +310,6 @@ def register():
         </form>
         <a href='{url_for('login')}'>Back to Login</a>
     """
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
