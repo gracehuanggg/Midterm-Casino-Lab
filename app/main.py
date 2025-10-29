@@ -8,6 +8,52 @@ user_manager = UserManager()
 app.secret_key = "hiding_shit"
 
 
+def center_page(body_html: str) -> str:
+    return f"""
+    <html>
+    <head>
+        <meta charset='utf-8'>
+        <style>
+            body {{ font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; }}
+            .center-container {{
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 12px;
+                padding: 20px;
+                box-sizing: border-box;
+            }}
+            .center-container form {{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }}
+            .center-container input[type='number'],
+            .center-container input[type='text'],
+            .center-container input[type='password'] {{
+                padding: 6px 8px;
+                font-size: 14px;
+            }}
+            .center-container button {{
+                padding: 8px 12px;
+                font-size: 14px;
+                cursor: pointer;
+            }}
+            a {{ color: #0645AD; text-decoration: none; }}
+        </style>
+    </head>
+    <body>
+        <div class='center-container'>
+            {body_html}
+        </div>
+    </body>
+    </html>
+    """
+
+
 @app.route("/")
 def index():
     username = session.get("username")
@@ -26,18 +72,20 @@ def login():
             session["username"] = username
             return redirect(url_for("home"))
         else:
-            return "<h3>Invalid login credentials!!</h3>"
+            return center_page("""
+                <h3>Invalid login credentials!!</h3>
+                <a href='{}'>Back to Login</a>
+            """.format(url_for('login')))
 
-    return f"""
+    return center_page(f"""
         <form method='POST'>
             <h2>Login</h2>
-            Username: <input name='username'><br>
-            Password: <input type='password' name='password'><br><br>
+            Username: <input name='username' type='text'><br>
+            Password: <input type='password' name='password'><br>
             <button type='submit'>Login</button>
             <p>Why dont you have an account you buffon <a href='{url_for('register')}'>Register</a></p>
         </form>
-        
-    """
+    """)
 
 
 @app.route("/home")
@@ -55,7 +103,7 @@ def home():
 
     player = Player(username, pw, balance, money_won, money_lost)
 
-    return f"""
+    return center_page(f"""
     <h2>Welcome {username}!</h2>
     <p>Balance: ${balance}</p>
     <form action="{url_for('start')}" method="post">
@@ -68,7 +116,7 @@ def home():
     <form action="{url_for('logout')}" method="post">
         <button type="submit">Logout</button>
     </form>
-    """
+    """)
 
 @app.route("/logout", methods=["POST"])
 def logout():
@@ -89,10 +137,16 @@ def start():
         try:
             bet = int(request.form.get("bet"))
         except (TypeError, ValueError):
-            return f"<h3>Invalid bet amount.</h3><a href='{url_for('start')}'>Back</a>"
+            return center_page(f"""
+                <h3>Invalid bet amount.</h3>
+                <a href='{url_for('start')}'>Back</a>
+            """)
 
         if bet <= 0 or bet > balance:
-            return f"<h3>Bet must be between 1 and your balance (${balance}).</h3><a href='{url_for('start')}'>Back</a>"
+            return center_page(f"""
+                <h3>Bet must be between 1 and your balance (${balance}).</h3>
+                <a href='{url_for('start')}'>Back</a>
+            """)
 
         # store bet in session and deal cards
         session["bet"] = bet
@@ -105,15 +159,15 @@ def start():
         return redirect(url_for("blackjack"))
 
     # Otherwise show a simple bet form
-    return f"""
+    return center_page(f"""
         <h2>Place your bet</h2>
         <p>Your balance: ${balance}</p>
         <form method='POST'>
-            Bet amount: <input name='bet' type='number' min='1' max='{balance}' required><br><br>
+            Bet amount: <input name='bet' type='number' min='1' max='{balance}' required>
             <button type='submit'>Start Game</button>
         </form>
         <a href='{url_for('home')}'>Back to Home</a>
-    """
+    """)
 
 @app.route("/blackjack")
 def blackjack():
@@ -122,7 +176,7 @@ def blackjack():
     dealer_total = total(dealer_cards)
     player_total = total(player_cards)
 
-    return f"""
+    return center_page(f"""
     <h2>Blackjack</h2>
     <p>Dealer's card: {dealer_cards[0]}</p>
     <p>Your cards: {', '.join(player_cards)}</p>
@@ -134,7 +188,7 @@ def blackjack():
     <form action="{url_for('stand_route')}" method="post">
         <button type="submit">Stand</button>
     </form>
-    """
+    """)
 
 @app.route("/hit", methods=["POST"])
 def hit():
@@ -153,14 +207,13 @@ def hit():
         username = session.get("username")
         if username and bet:
             apply_bet_result(username, result, bet)
-
-        return f"""
+        return center_page(f"""
         <h3>You busted!</h3>
         <p>Dealer cards: {', '.join(dealer_cards)}</p>
         <p>Your cards: {', '.join(player_cards)}</p>
         <p>Result: {result}</p>
         <a href="{url_for('home')}">Play Again</a>
-        """
+        """)
     return redirect(url_for("blackjack"))
 
 @app.route("/stand", methods=["POST"])
@@ -178,13 +231,13 @@ def stand_route():
     if username and bet:
         apply_bet_result(username, result, bet)
 
-    return f"""
+    return center_page(f"""
     <h3>Game Over</h3>
     <p>Dealer cards: {', '.join(dealer_cards)}</p>
     <p>Your cards: {', '.join(player_cards)}</p>
     <p>Result: {result}</p>
     <a href="{url_for('home')}">Play Again</a>
-    """
+    """)
 
 
 def apply_bet_result(username, result, bet):
@@ -229,10 +282,16 @@ def add_funds():
     try:
         amount = float(amount_number)
     except (TypeError, ValueError):
-        return f"<h3>Invalid amount, dofus.</h3><a href='{url_for('home')}'>Back</a>"
+        return center_page(f"""
+            <h3>Invalid amount, dofus.</h3>
+            <a href='{url_for('home')}'>Back</a>
+        """)
 
     if amount <= 0:
-        return f"<h3>Amount must be positive, ding dong.</h3><a href='{url_for('home')}'>Back</a>"
+        return center_page(f"""
+            <h3>Amount must be positive, ding dong.</h3>
+            <a href='{url_for('home')}'>Back</a>
+        """)
 
     db = user_manager._load_db()
     users = db.setdefault("users", {})
@@ -247,7 +306,10 @@ def add_funds():
     player.update_balance(amount)
     player.update_db()
 
-    return f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('home')}'>You dont need to be here anymore do silly goose</a>"
+    return center_page(f"""
+        <h3>Added ${amount:.2f} to your account.</h3>
+        <a href='{url_for('home')}'>Back to Home</a>
+    """)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -258,21 +320,24 @@ def register():
 
         success = user_manager.register(username, password)
         if not success:
-            return "<h3>Username already exists.</h3><a href='/register'>Try again</a>"
+            return center_page("""
+                <h3>Username already exists.</h3>
+                <a href='/register'>Try again</a>
+            """)
 
         session['username'] = username
         return redirect(url_for('home'))
 
     # GET -> show simple registration form
-    return f"""
+    return center_page(f"""
         <form method='POST'>
             <h2>Register</h2>
-            Username: <input name='username'><br>
-            Password: <input type='password' name='password'><br><br>
+            Username: <input name='username' type='text'><br>
+            Password: <input type='password' name='password'><br>
             <button type='submit'>Register</button>
         </form>
         <a href='{url_for('login')}'>Back to Login</a>
-    """
+    """)
 
 
 
