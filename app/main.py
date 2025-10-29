@@ -30,21 +30,6 @@ def index():
         <button type="submit">Logout</button>
     </form>
     """
-@app.route("/wallet")
-def wallet():
-    username=session.get("username")
-    if not user_data:
-        session.clear()
-        return redirect (url_for("login"))
-
-    balance = float(user_data.get("balance", 0))
-    money = float(user_data.get("money_won", 0))
-    money_lost = float(user_data.get("money_lost", 0))
-
-    return f"""
-        <h2>Wallet</h2>
-        <p>Balance: ${balance:.2f}</p>
-        <p>Total Won: ${money_won.2f} | Total Lost: ${money_lost:2f}</p>
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -56,8 +41,12 @@ def login():
             session["username"] = username
             return redirect(url_for("home"))
         else:
-            return "<h3>Invalid login credentials!!</h3>"
-
+            return f"""
+            <h3>Invalid login credentials!!</h3>
+            <a href="{url_for('index')}">
+                <button type="button">Back to Home</button>
+            </a>
+            
     return f"""
         <form method='POST'>
             <h2>Login</h2>
@@ -81,12 +70,6 @@ def home():
     if not user_data:
         session.clear()
         return redirect(url_for("login"))
-    pw = user_data.get("pw")
-    balance = user_data.get("balance", 0)
-    money_won = user_data.get("money_won", 0)
-    money_lost = user_data.get("money_lost", 0)
-
-    player = Player(username, pw, balance, money_won, money_lost)
 
     return f"""
     <h2>Welcome {username}!</h2>
@@ -105,11 +88,37 @@ def home():
         <button type="submit">Logout</button>
     </form>
     """
+@app.route("/wallet")
+def wallet():
+    username=session.get("username")
+    if not user_data:
+        session.clear()
+        return redirect (url_for("login"))
+
+    balance = float(user_data.get("balance", 0))
+    money = float(user_data.get("money_won", 0))
+    money_lost = float(user_data.get("money_lost", 0))
+
+    return f"""
+        <h2>Wallet</h2>
+        <p>Balance: ${balance:.2f}</p>
+        <p>Total Won: ${money_won.2f} | Total Lost: ${money_lost:2f}</p>
+
+        <h3>Add Funds</h3>
+        <form action="{url_for('add_funds')}" method="post">
+            <label>Amount:</label>
+            <input name='amount' type='number' min='0.01' step='0.01' required>
+            <button type='submit'>Add</button>
+        </form>
+
+        <p><a href="{url_for('home')}">Back to Home</a></p>
+    """
 
 @app.route("/logout", methods=["POST"])
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
 @app.route("/start", methods=["GET", "POST"])
 def start():
     username = session.get("username")
@@ -274,10 +283,10 @@ def add_funds():
     try:
         amount = float(amount_number)
     except (TypeError, ValueError):
-        return f"<h3>Invalid amount, dofus.</h3><a href='{url_for('home')}'>Back</a>"
+        return f"<h3>Invalid amount, dofus.</h3><a href='{url_for('wallet')}'>Back</a>"
 
     if amount <= 0:
-        return f"<h3>Amount must be positive, ding dong.</h3><a href='{url_for('home')}'>Back</a>"
+        return f"<h3>Amount must be positive, ding dong.</h3><a href='{url_for('wallet')}'>Back</a>"
 
     db = user_manager._load_db()
     users = db.setdefault("users", {})
@@ -295,7 +304,7 @@ def add_funds():
     player.update_balance(amount)
     player.update_db()
 
-    return f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('home')}'>You don't need to be here anymore, you silly goose</a>"
+    return f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('wallet')}'>You don't need to be here anymore, you silly goose</a>"
 
 
 @app.route('/register', methods=['GET', 'POST'])
