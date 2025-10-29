@@ -58,7 +58,6 @@ def home():
     
     return f"""
     <h2>Welcome {display_name}!</h2>
-    <p>Balance: ${balance}</p>
     <form action="{url_for('start')}" method="post">
         <button type="submit">Play Blackjack</button>
     </form>
@@ -66,6 +65,9 @@ def home():
         Add funds: <input name='amount' type='number' min='1' step='1' required>
         <button type='submit'>Add</button>
     </form>
+    
+    <a href="{url_for('wallet')}">View Wallet</a><br><br>
+    
     <form action="{url_for('logout')}" method="post">
         <button type="submit">Logout</button>
     </form>
@@ -281,6 +283,29 @@ def register():
         <a href='{url_for('login')}'>Back to Login</a>
     """
 
+@app.route("/wallet")
+def wallet():
+    username = session.get("username")
+    if not username:
+        return redirect(url_for("login"))
+
+    db = user_manager._load_db()
+    user_data = db.get("users", {}).get(username, {})
+
+    balance = user_data.get("balance", 0)
+    money_won = user_data.get("money_won", 0)
+    money_lost = user_data.get("money_lost", 0)
+    net_value = money_won - money_lost
+
+    return f"""
+    <h2>Wallet</h2>
+    <p><strong>Balance:</strong> ${balance}</p>
+    <p><strong>Total Money Won:</strong> ${money_won}</p>
+    <p><strong>Total Money Lost:</strong> ${money_lost}</p>
+    <p><strong>Net Value:</strong> ${net_value}</p>
+
+    <a href="{url_for('home')}">Back to Home</a>
+    """
 
 
 if __name__ == "__main__":
