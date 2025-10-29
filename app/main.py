@@ -57,22 +57,22 @@ def home():
         return redirect(url_for("login"))
 
     return f"""
-    <h2>Welcome {username}!</h2>
-    <p>Balance: ${balance:.2f}</p>
-    <h3>Place your bet</h3>
-    <form action="{url_for('start')}" method="post">
-        Bet amount:
-        <input name='bet' type='number' min='1' max='{balance:.2f}' step='0.01' required><br><br>
-        <button type='submit'>Play Blackjack</button>
-    </form>
-    <form action="{url_for('add_funds')}" method="post">
-        Add funds: <input name='amount' type='number' min='0.01' step='0.01' required>
-        <button type='submit'>Add</button>
-    </form>
-    <form action="{url_for('logout')}" method="post">
-        <button type="submit">Logout</button>
-    </form>
-    """
+        <h2>Welcome {username}!</h2>
+
+        <h3>Place your bet</h3>
+        <form action="{url_for('start')}" method="post">
+            Bet amount:
+            <input name='bet' type='number' min='0.01' step='0.01' required><br><br>
+            <button type='submit'>Play Blackjack</button>
+        </form>
+
+        <p><a href="{url_for('wallet')}">Go to Wallet (balance & add funds)</a></p>
+
+        <form action="{url_for('logout')}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+"""
+
 @app.route("/wallet")
 def wallet():
     username=session.get("username")
@@ -86,7 +86,7 @@ def wallet():
         return redirect(url_for("login"))
 
     balance = float(user_data.get("balance", 0))
-    money = float(user_data.get("money_won", 0))
+    money_won = float(user_data.get("money_won", 0))
     money_lost = float(user_data.get("money_lost", 0))
 
     return f"""
@@ -99,9 +99,10 @@ def wallet():
             <label>Amount:</label>
             <input name='amount' type='number' min='0.01' step='0.01' required>
             <button type='submit'>Add</button>
-    </form>
-    <p><a href="{url_for('home')}">Back to Home</a></p>
-"""
+        </form>
+
+        <p><a href="{url_for('home')}">Back to Home</a></p>
+    """
 
 @app.route("/logout", methods=["POST"])
 def logout():
@@ -120,12 +121,7 @@ def start():
     if not user_data:
         session.clear()
         return redirect(url_for("login"))
-    balance = user_data.get("balance", 0)
-
-    pw = user_data.get("pw")
-    balance = user_data.get("balance", 0)
-    money_won = user_data.get("money_won", 0)
-    money_lost = user_data.get("money_lost", 0)
+    balance = float(user_data.get("balance", 0))
     
     # If form submitted with a bet, validate and start the game
     if request.method == "POST" and request.form.get("bet"):
@@ -198,6 +194,7 @@ def hit():
         dealer_cards = stand(dealer_cards)
         if not dealer_cards or not player_cards:
             return redirect(url_for("start"))
+        dealer_cards = stand(dealer_cards)
         session["dealer_cards"] = dealer_cards
         result = winner(player_cards, dealer_cards)
         bet = session.get("bet", 0)
@@ -218,7 +215,8 @@ def hit():
 def stand_route():
     dealer_cards = session.get("dealer_cards")
     player_cards = session.get("player_cards")
-
+    if not dealer_cards or not player_cards:
+        return redirect(url_for("start"))
     dealer_cards = stand(dealer_cards)
     session["dealer_cards"] = dealer_cards
 
@@ -276,6 +274,8 @@ def apply_bet_result(username, result, bet):
 @app.route("/add_funds", methods=["POST"])
 def add_funds():
     username = session.get("username")
+    if not username:
+        return redirect(url_for("login"))
     amount_number = request.form.get("amount")
     try:
         amount = float(amount_number)
