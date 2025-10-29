@@ -54,9 +54,10 @@ def home():
     money_lost = user_data.get("money_lost", 0)
 
     player = Player(username, pw, balance, money_won, money_lost)
-
+    display_name = user_data.get("preferred_name") or username
+    
     return f"""
-    <h2>Welcome {username}!</h2>
+    <h2>Welcome {display_name}!</h2>
     <p>Balance: ${balance}</p>
     <form action="{url_for('start')}" method="post">
         <button type="submit">Play Blackjack</button>
@@ -256,7 +257,12 @@ def register():
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
 
-        success = user_manager.register(username, password)
+        preferred_name = request.form.get('preferred_name', '').strip()
+        if preferred_name == "":
+            preferred_name = None
+        
+        success = user_manager.register(username, password, preferred_name)
+        
         if not success:
             return "<h3>Username already exists.</h3><a href='/register'>Try again</a>"
 
@@ -268,7 +274,8 @@ def register():
         <form method='POST'>
             <h2>Register</h2>
             Username: <input name='username'><br>
-            Password: <input type='password' name='password'><br><br>
+            Password: <input type='password' name='password'><br>
+            Preferred Name (optional): <input name='preferred_name'><br><br>
             <button type='submit'>Register</button>
         </form>
         <a href='{url_for('login')}'>Back to Login</a>
