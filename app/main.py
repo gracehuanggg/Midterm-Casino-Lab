@@ -15,6 +15,36 @@ def index():
         return redirect(url_for("home"))
     return redirect(url_for("login"))
 
+    return f"""
+    <h2>Welcome {username}!</h2>
+
+    <h3>Place your bet</h3>
+    <form action="{url_for('start')}"method="post">
+        Bet amount:
+        <input name='bet' type='number' min='1' step='0.01' required><br><br>
+        <button type='submit'>Play Blackjack</button>
+    </form>
+
+    <p><a href="{url_for('start')}">Go to Wallet(balance & add funds)</a></p>
+    <form action="{url_for('logout')}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+    """
+@app.route("/wallet")
+def wallet():
+    username=session.get("username")
+    if not user_data:
+        session.clear()
+        return redirect (url_for("login"))
+
+    balance = float(user_data.get("balance", 0))
+    money = float(user_data.get("money_won", 0))
+    money_lost = float(user_data.get("money_lost", 0))
+
+    return f"""
+        <h2>Wallet</h2>
+        <p>Balance: ${balance:.2f}</p>
+        <p>Total Won: ${money_won.2f} | Total Lost: ${money_lost:2f}</p>
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
