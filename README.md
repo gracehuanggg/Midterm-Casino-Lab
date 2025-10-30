@@ -27,10 +27,10 @@ The system:
 <pre>'''Midterm-Casino-Lab/
 │
 ├── app/ 
-│ ├── main.py # Flask entry point; connects all modules and handles routes
+│ ├── main.py # Flask entry point; connects all modules and handles routes; handles deposits
 │ ├── blackjack.py # Blackjack game backend logic and rules
 │ ├── player.py #Handles Player class
-│ ├── funds.py # Handles deposit and balance management
+│ ├── slot.py # Slot machine logic (generates symbol)
 │ └── user.py # Manages user registration, login, and logout
 │
 ├── data/
@@ -53,11 +53,12 @@ The system:
 - Auto-login newly created accounts
 - Include a preferred name field for personalized home page greetings
 
-### Deposit Funds (`funds.py`)
+### Deposit Funds/Wallet (`main.py`)
 - Enable users to add funds
 - Update funds into JSON data
 - Reflect the new balance on the dashboard
 - Limit excessive deposits (no more than 1 billion dollars)
+- Shows all money values with two decimal places (to the cent)
 
 ### Casino Dashboard (`home.html` / `main.py`)
 - Display username and current balance (balance hidden on initial login for privacy)
@@ -71,10 +72,18 @@ The system:
 - Standard Blackjack logic (hit, stand, dealer rules)
 - Track bets and game outcomes
 - Adjust player balance automatically
-- Persist balance changes to JSON
+- Persist balance changes to JSON with two decimals
 
 ### Player Class (`player.py`)
 - Keeps track of player attributes
+
+### Slot Machine (`slot.py`, `main.py`)
+- Allows the user to place a custom bet before spinning
+- Randomly determines three symbols for each spin
+- Winning combinations pay out automatically (3-match high payout, 2-match low payout)
+- Bets must be within the user's balance and at least $0.01, and less than a billion dollars
+- Updates the user's wins/losses based on the results
+- Saves progress and updates to theJSON file
 
 ---
 
