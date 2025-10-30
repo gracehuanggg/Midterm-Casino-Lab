@@ -1,7 +1,7 @@
 
 # CMP521 Python Casino App — Sprint 2 (Group A)
 
-**Sprint Duration:** October 13–17, 2025  
+**Sprint Duration:** October 27–31, 2025  
 **Team Members:** Grace Huang, Mia Guo, Joelle Yang, Ethan Huang  
 **Project Owner:** Kevin Santos  
 **Framework:** Flask (Python 3.10+)
