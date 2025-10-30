@@ -56,9 +56,11 @@ def home():
     if not user_data:
         session.clear()
         return redirect(url_for("login"))
+    
+    display_name = user_data.get("preferred_name") or username
 
     return f"""
-        <h2>Welcome {username}!</h2>
+        <h2>Welcome {display_name}!</h2>
 
         <h3>Place your bet</h3>
         <form action="{url_for('start')}" method="post">
@@ -323,6 +325,10 @@ def add_funds():
     if amount <= 0:
         return f"<h3>Amount must be positive, ding dong.</h3><a href='{url_for('wallet')}'>Back</a>"
 
+    # Prevent unrealistic deposits over $1 billion
+    if amount > 1_000_000_000:
+        return f"<h3>Deposit exceeds the $1,000,000,000 limit. Do not add so much money!</h3><a href='{url_for('home')}'>Back</a>"
+
     db = user_manager._load_db()
     users = db.setdefault("users", {})
     user_data = users.get(username)
@@ -343,12 +349,18 @@ def add_funds():
 
 
 @app.route('/register', methods=['GET', 'POST'])
+
 def register():
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
 
-        success = user_manager.register(username, password)
+        preferred_name = request.form.get('preferred_name', '').strip()
+        if preferred_name == "":
+            preferred_name = None
+
+        success = user_manager.register(username, password, preferred_name)
+
         if not success:
             return "<h3>Username already exists.</h3><a href='/register'>Try again</a>"
 
@@ -360,7 +372,8 @@ def register():
         <form method='POST'>
             <h2>Register</h2>
             Username: <input name='username'><br>
-            Password: <input type='password' name='password'><br><br>
+            Password: <input type='password' name='password'><br>
+            Preferred Name (optional): <input name='preferred_name'><br><br>
             <button type='submit'>Register</button>
         </form>
         <a href='{url_for('login')}'>Back to Login</a>
