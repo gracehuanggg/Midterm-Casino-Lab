@@ -19,7 +19,7 @@ class UserManager:
         with open(self.db_path, "w") as f:
             json.dump(data, f, indent=2)
 
-    def register(self, username: str, password: str) -> bool:
+    def register(self, username: str, password: str, preferred_name: Optional[str] = None) -> bool:
 
         username = username.strip()
         if not username or not password:
@@ -32,6 +32,7 @@ class UserManager:
 
         users[username] = {
             "pw": password,
+            "preferred_name": preferred_name,
             "balance": 100,
             "money_won": 0,
             "money_lost": 0
@@ -47,3 +48,7 @@ class UserManager:
         if username in users and users[username]["pw"] == password:
             return True
         return False
+
+def get_user(self, username: str) -> Optional[Dict]:
+    db = self._load_db()
+    return db.get("users", {}).get(username)
