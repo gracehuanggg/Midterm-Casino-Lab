@@ -2,6 +2,7 @@ from flask import Flask, request, session, redirect, url_for
 from user import UserManager
 from player import Player
 from blackjack import pick_card, add, stand, winner, total
+from slot import pull_lever
 
 app = Flask(__name__)
 user_manager = UserManager()
@@ -14,7 +15,12 @@ def center_page(body_html: str) -> str:
     <head>
         <meta charset='utf-8'>
         <style>
-            body {{ font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; }}
+            body {{ 
+                font-family: Arial, Helvetica, sans-serif; 
+                margin: 0; 
+                padding: 0; 
+                background-color: #b8e2f2;
+            }}
             .center-container {{
                 min-height: 100vh;
                 display: flex;
@@ -24,6 +30,12 @@ def center_page(body_html: str) -> str:
                 gap: 12px;
                 padding: 20px;
                 box-sizing: border-box;
+                background-color: #f0f0f0;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-width: 600px;
+                margin: 20px auto;
+                min-height: calc(100vh - 40px);
             }}
             .center-container form {{
                 display: flex;
@@ -106,6 +118,20 @@ def home():
     return center_page(f"""
     <h2>Welcome {username}!</h2>
     <p>Balance: ${balance}</p>
+    <div style="width:100%; max-width:500px; background:#ffffff; border:1px solid #ddd; padding:12px; border-radius:8px; display:flex; gap:12px;">
+        <div style="text-align:center;">
+            <div style="font-size:18px; font-weight:600;">${money_won}</div>
+            <div style="font-size:12px; color:#666;">Money Won</div>
+        </div>
+        <div style="text-align:center;">
+            <div style="font-size:18px; font-weight:600;">${money_lost}</div>
+            <div style="font-size:12px; color:#666;">Money Lost</div>
+        </div>
+        <div style="text-align:center;">
+            <div style="font-size:18px; font-weight:600;">${money_won - money_lost}</div>
+            <div style="font-size:12px; color:#666;">Net</div>
+        </div>
+    </div>
     <form action="{url_for('start')}" method="post">
         <button type="submit">Play Blackjack</button>
     </form>
@@ -385,7 +411,7 @@ def start_slots():
 
 @app.route("/play_slots")
 def play_slots():
-    from slot import pull_lever
+
     
     bet = session.get("slots_bet", 0)
     if not bet:
@@ -400,7 +426,7 @@ def play_slots():
         result_text = f"Congratulations! You won ${win_amount}!"
     else:
         win_amount = -bet
-        result_text = f"Why would you play slots? You just lose ${bet}. Try again!"
+        result_text = f"Why would you play slots? You just lost ${bet}. Try again!"
 
     username = session.get("username")
     if username:

@@ -51,10 +51,9 @@
     },
     "zach": {
       "pw": "bates",
-      "preferred_name": null,
-      "balance": 0,
+      "balance": 0.0,
       "money_won": 300,
-      "money_lost": 400
+      "money_lost": 100500
     }
   }
 }
