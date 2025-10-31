@@ -2,30 +2,48 @@
     "users": {
         "mia": {
             "pw": "1234",
+            "preferred_name": null,
             "balance": 500,
             "money_won": 0,
             "money_lost": 0
         },
         "ethan": {
             "pw": "abcd",
+            "preferred_name": null,
             "balance": 1275,
             "money_won": 1017,
             "money_lost": 292
         },
         "grace": {
             "pw": "pass",
+            "preferred_name": null,
             "balance": 800,
             "money_won": 300,
             "money_lost": 0
         },
         "joelle": {
             "pw": "7890",
-            "balance": 625.0,
+            "balance": 100000818.15,
             "money_won": 50,
             "money_lost": 180
         },
         "hihi": {
             "pw": "1414",
+            "preferred_name": null,
+            "balance": 100,
+            "money_won": 0,
+            "money_lost": 0
+        },
+        "sdf": {
+            "pw": "123",
+            "preferred_name": "asdfasdf",
+            "balance": 100,
+            "money_won": 0,
+            "money_lost": 0
+        },
+        "testj": {
+            "pw": "123123",
+            "preferred_name": null,
             "balance": 100,
             "money_won": 0,
             "money_lost": 0
