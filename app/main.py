@@ -83,14 +83,15 @@ def login():
             session["username"] = username
             return redirect(url_for("home"))
         else:
-            return f"""
+            body_html =  f"""
             <h3>Invalid login credentials!!</h3>
             <a href="{url_for('index')}">
                 <button type="button">Back to Home</button>
             </a>
             """
+            return center_page(body_html)
             
-    return f"""
+    body_html = f"""
         <form method='POST'>
             <h2>Login</h2>
             Username: <input name='username'><br>
@@ -98,8 +99,8 @@ def login():
             <button type='submit'>Login</button>
             <p>Why don't you have an account, you buffoon! <a href='{url_for('register')}'>Register</a></p>
         </form>
-        
     """
+    return center_page(body_html)
 
 
 @app.route("/home")
@@ -155,7 +156,7 @@ def wallet():
     money_won = float(user_data.get("money_won", 0))
     money_lost = float(user_data.get("money_lost", 0))
 
-    return f"""
+    body_html = f"""
         <h2>Wallet</h2>
         <p>Balance: ${balance:.2f}</p>
         <p>Total Won: ${money_won:.2f} | Total Lost: ${money_lost:.2f}</p>
@@ -169,6 +170,7 @@ def wallet():
 
         <p><a href="{url_for('home')}">Back to Home</a></p>
     """
+    return center_page(body_html)
 
 @app.route("/logout", methods=["POST"])
 def logout():
@@ -188,7 +190,12 @@ def slot():
     balance = user_data.get("balance", 0)
     money_won = user_data.get("money_won", 0)
     money_lost = user_data.get("money_lost", 0)
-
+    if balance < 0:
+        body_html = f"""
+        <h3>You don't have enough money to play the slot machine.</h3>
+        <a href='{url_for('wallet')}'>Go to Wallet</a>
+        """
+        return center_page(body_html)
     player = Player(username, pw, balance, money_won, money_lost)
     cards = pull_lever()
     player.update_balance(-10)
@@ -200,13 +207,14 @@ def slot():
         message = "You didn't win anything :("
 
     player.update_db()
-    return f"""
+    body_html =  f"""
     <h2>Slot Machine: </h2>   
     <p>Your pulls: {', '.join(map(str, cards))}</p>
     <p>{message}</p>
     <p>Your new balance is: ${player.balance}</p>
     <a href="{url_for('home')}">Back to Home</a>
     """
+    return center_page(body_html)
 
 @app.route("/start", methods=["GET", "POST"])
 def start():
@@ -243,7 +251,7 @@ def start():
         return redirect(url_for("blackjack"))
 
     # Otherwise show a simple bet form
-    return f"""
+    body_html =  f"""
     <h2>Place your bet</h2>
     <p>Your balance: ${balance:.2f} (see <a href='{url_for('wallet')}'>Wallet</a>)</p>
     <form method='POST'>
@@ -252,6 +260,7 @@ def start():
     </form>
     <a href='{url_for('home')}'>Back to Home</a>
     """
+    return center_page(body_html)
 
 @app.route("/blackjack")
 def blackjack():
@@ -264,7 +273,7 @@ def blackjack():
     dealer_total = total(dealer_cards)
     player_total = total(player_cards)
 
-    return f"""
+    body_html =  f"""
     <h2>Blackjack</h2>
     <p>Dealer's card: {dealer_cards[0]}</p>
     <p>Your cards: {', '.join(player_cards)}</p>
@@ -277,6 +286,7 @@ def blackjack():
         <button type="submit">Stand</button>
     </form>
     """
+    return center_page(body_html)
 
 @app.route("/hit", methods=["POST"])
 def hit():
@@ -301,13 +311,14 @@ def hit():
         if username and bet:
             apply_bet_result(username, result, bet)
 
-        return f"""
+        body_html =  f"""
         <h3>You busted!</h3>
         <p>Dealer cards: {', '.join(dealer_cards)}</p>
         <p>Your cards: {', '.join(player_cards)}</p>
         <p>Result: {result}</p>
         <a href="{url_for('home')}">Play Again</a>
         """
+        return center_page(body_html)
     return redirect(url_for("blackjack"))
 
 @app.route("/stand", methods=["POST"])
@@ -326,13 +337,14 @@ def stand_route():
     if username and bet:
         apply_bet_result(username, result, bet)
 
-    return f"""
+    body_html =  f"""
     <h3>Game Over</h3>
     <p>Dealer cards: {', '.join(dealer_cards)}</p>
     <p>Your cards: {', '.join(player_cards)}</p>
     <p>Result: {result}</p>
     <a href="{url_for('home')}">Play Again</a>
     """
+    return center_page(body_html)
 
 
 def apply_bet_result(username, result, bet):
@@ -404,7 +416,8 @@ def add_funds():
     player.update_balance(amount)
     player.update_db()
 
-    return f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('wallet')}'>You don't need to be here anymore, you silly goose</a>"
+    body_html =  f"<h3>Added ${amount:.2f} to your account.</h3><a href='{url_for('wallet')}'>You don't need to be here anymore, you silly goose</a>"
+    return center_page(body_html)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -427,7 +440,7 @@ def register():
         return redirect(url_for('home'))
 
     # GET -> show simple registration form
-    return f"""
+    body_html =  f"""
         <form method='POST'>
             <h2>Register</h2>
             Username: <input name='username'><br>
@@ -437,6 +450,7 @@ def register():
         </form>
         <a href='{url_for('login')}'>Back to Login</a>
     """
+    return center_page(body_html)
 
 if __name__ == "__main__":
     app.run(debug=True)

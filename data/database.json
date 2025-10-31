@@ -47,6 +47,12 @@
             "balance": 100,
             "money_won": 0,
             "money_lost": 0
+        },
+        "zach": {
+            "pw": "bates",
+            "balance": 120.0,
+            "money_won": 0.0,
+            "money_lost": 100.0
         }
     }
 }
