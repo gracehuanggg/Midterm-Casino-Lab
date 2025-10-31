@@ -9,6 +9,63 @@ user_manager = UserManager()
 app.secret_key = "hiding_shit"
 
 
+def center_page(body_html: str) -> str:
+    return f"""
+    <html>
+    <head>
+        <meta charset='utf-8'>
+        <style>
+            body {{ 
+                font-family: Arial, Helvetica, sans-serif; 
+                margin: 0; 
+                padding: 0; 
+                background-color: #b8e2f2;
+            }}
+            .center-container {{
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 12px;
+                padding: 20px;
+                box-sizing: border-box;
+                background-color: #f0f0f0;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-width: 600px;
+                margin: 20px auto;
+                min-height: calc(100vh - 40px);
+            }}
+            .center-container form {{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }}
+            .center-container input[type='number'],
+            .center-container input[type='text'],
+            .center-container input[type='password'] {{
+                padding: 6px 8px;
+                font-size: 14px;
+            }}
+            .center-container button {{
+                padding: 8px 12px;
+                font-size: 14px;
+                cursor: pointer;
+            }}
+            a {{ color: #0645AD; text-decoration: none; }}
+        </style>
+    </head>
+    <body>
+        <div class='center-container'>
+            {body_html}
+        </div>
+    </body>
+    </html>
+    """
+
+
 @app.route("/")
 def index():
     username = session.get("username")
@@ -59,7 +116,7 @@ def home():
     
     display_name = user_data.get("preferred_name") or username
 
-    return f"""
+    body_html = f"""
         <h2>Welcome {display_name}!</h2>
 
         <h3>Place your bet</h3>
@@ -74,11 +131,13 @@ def home():
         <form action="{url_for('slot')}" method="post">
             <button type="submit">Pull Slot Machine Lever</button>
         </form>
-        <p>Play the slot machine game! 10$ to spin once! </p>
+        <p>Play the slot machine game! $10 to spin once!</p>
+
         <form action="{url_for('logout')}" method="post">
             <button type="submit">Logout</button>
         </form>
-"""
+    """
+    return center_page(body_html)
 
 @app.route("/wallet")
 def wallet():
